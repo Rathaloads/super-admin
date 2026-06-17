@@ -17,7 +17,7 @@ Vue3 作为前端开发，NestJS 作为后端开发，MySQL 作为数据库，Re
 ## 项目目录结构说明
 
 - client: 前端代码目录
-- server: 后端代码目录
+- backend-service: 后端代码目录
 - docs: 项目文档目录
 - scripts: 项目脚本目录
 - sql: 项目数据库表结构以及存储过程等目录
