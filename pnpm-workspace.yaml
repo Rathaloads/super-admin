@@ -1,8 +1,10 @@
 packages:
   - client
+  - backend-service
 
 # pnpm 11：需执行构建脚本的依赖在此声明
 allowBuilds:
   esbuild: true
   vue-demi: true
   '@parcel/watcher': true
+  unrs-resolver: false
