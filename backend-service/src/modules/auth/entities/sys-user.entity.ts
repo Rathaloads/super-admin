@@ -14,8 +14,8 @@ export class SysUserEntity {
   @Column({ length: 64, unique: true, comment: '邮箱' })
   mail: string;
 
-  @Column({ length: 64, nullable: true, comment: '密码' })
-  password: string | null;
+  @Column({ length: 64, comment: '密码' })
+  password: string;
 
   @Column({ length: 64, nullable: true, comment: '昵称' })
   nickname: string | null;
