@@ -1,14 +1,20 @@
 # SuperAdmin-PC
 
-## 项目基础信息
+## 项目概览
 
-- 项目介绍: 
-基于 Vue 3 和 NestJS 的后台管理系统, 主要提供我个人来使用，将平时一些想要开发的管理工具或者想要的功能，可以在这个项目中进行开发。
+一个全栈的Web端个人管理台项目，前端基于Vue， 后端基于NestJS，数据库使用MySQL，缓存使用Redis。
 
-- 核心技术栈: 
-Vue3 作为前端开发，NestJS 作为后端开发，MySQL 作为数据库，Redis 作为缓存。
+- **前端**: 代码在client目录下, 基于Vue3 + Vite + Composition API + Pinia + Element Plus + Vue Router + Tailwind CSS + TypeScript + Scss
+- **后端**: 代码在backend-service目录下, 基于NestJS + TypeORM + MySQL + Redis + Winston(日志)
+- **数据库**: MySQL, 使用TypeORM作为ORM框架
+- **缓存**: Redis, 使用ioredis作为缓存客户端
+- **包管理**: 使用pnpm作为包管理工具
+- **运行时**: Node.js >= 20
 
-- 核心约束: 
+
+
+## 项目核心约束: 
+
 1. 所有文档必须使用中文编写
 2. 所有代码必须使用中文注释
 3. 遵循 Vue 3 和 NestJS 的开发规范
@@ -20,35 +26,13 @@ Vue3 作为前端开发，NestJS 作为后端开发，MySQL 作为数据库，Re
 - backend-service: 后端代码目录
 - docs: 项目文档目录
 - scripts: 项目脚本目录
-- sql: 项目数据库表结构以及存储过程等目录
-
-## 技术栈说明
-
-### 前端技术栈
-
-| 层级 | 选型 | 说明 |
-| ---- | ---- | ---- |
-| 框架 | Vue 3 + Composition API | `<script setup lang="ts">` |
-| 状态管理 | Pinia | Setup Store 风格（`defineStore` + `ref`） |
-| 构建工具 | Vite | 开发服务器与生产构建 |
-| 语言 | TypeScript | 严格模式，构建前执行 `vue-tsc` |
-| UI 组件库 | Element Plus | 全局注册，中文 locale |
-| 图标 | @element-plus/icons-vue | 按需从包中导入 |
-| 样式 | Tailwind CSS 3 + SCSS | 布局/间距用 Tailwind，组件内样式用 scoped SCSS |
-| 路由 | Vue Router 4 | **Hash 模式**（`createWebHashHistory`） |
-
-
-### 后端技术栈
-
-| 层级 | 选型 | 说明 |
-| ---- | ---- | ---- |
-| 框架 | NestJS | 基于 Node.js 的框架 |
-| 数据库 | MySQL 8.0 | 关系型数据库 |
-| 缓存 | Redis | 缓存数据库 |
+- sql: 项目数据库表
+- specs: 项目需求文档目录
 
 ## 常用命令
 
 ### 前端常用命令
+
 ```bash
 pnpm install   # 安装依赖
 pnpm dev       # 启动开发服务器（默认 http://localhost:5173）
@@ -57,59 +41,76 @@ pnpm preview   # 预览构建产物
 ```
 
 ### 后端常用命令
-```bash
 
+```bash
+pnpm install   # 安装依赖
+pnpm dev       # 启动开发服务器（默认 http://localhost:3000）
+pnpm build     # 生产构建
 ```
 
+## 项目开发规范
 
-## 前端架构约定
+### 前端代码规范
 
-### 路由
+  - 所有新组件 **必须用 `<script setup lang="ts">`**，禁止 Options API、禁止裸 `<script>` 写 setup()。
+  - 每个 `.vue` 文件结构顺序：
+    1. `<template>`（视图）
+    2. `<script setup lang="ts">` (逻辑)
+    3. `<style lang="scss" scoped>`（样式，能 scoped 就 scoped）
+  - 组件文件命名：**`PascalCase.vue`**（如 `UserProfileCard.vue`），禁止 kebab-case 文件名。
+  - 一个 SFC **只做一件事**：如果你的 `<script setup>` 超过 ~150 行（不含类型），先拆 composable / 拆子组件，再扩容。
 
-- 使用 **Hash 路由**，访问路径形如 `/#/xxx`，无需服务端配置 fallback。
-- 页面级路由挂在 `MainLayout` 的 `children` 下。
-- 页面标题通过路由 `meta.title` 传递，由 `MainLayout` 读取展示。
-- 路由组件使用动态 `import()` 懒加载。
-- 新增功能模块时：在 `views/<模块>/` 添加页面，在 `router/index.ts` 注册路由，在 `MainLayout.vue` 侧边栏添加菜单项。
+  #### Composable 规范
 
-### 状态管理
+  - 可复用的状态/逻辑抽成 `composables/`，命名 `useXxx.ts`（驼峰，带 use 前缀）。
+  - composable **不应**直接耦合具体组件模板，返回值应该是数据和方法。
+  - composable 里有副作用（listener / timer / subscription）→ **必须在 unmounted 清理**：`onUnmounted(() => clearInterval(timer))` 之类。
 
-- 按业务模块拆分 Store，文件放在 `src/stores/`，命名 `useXxxStore`。
-- 使用 Pinia Setup Store：`defineStore('id', () => { ... })`。
-- 领域类型定义在 `src/types/`，Store 与组件通过 `@/types/*` 引用。
+  #### 目录约定(src/)
 
-### 组件与样式
+  | 路径 | 职责 |
+  |------|------|
+  | `components/` | 通用/基础 UI 组件 |
+  | `views/`  | 页面级组件（路由入口） |
+  | `composables/` | 可复用的状态/逻辑 |
+  | `stores/` | Pinia store |
+  | `utils/` | 纯工具函数（无副作用、可 tree-shake） |
+  | `api/` | 按模块拆分接口：`api/user.ts` / `api/order.ts`，统一走封装好的 request |
+  | `types/` | 共享 TS 类型 |
+  | `router/` | 路由定义 |
+  | `styles/` | 全局 tokens、variables、reset（谨慎扩张） |
 
-- 页面组件放 `src/views/<模块>/`，通用 UI 放 `src/components/`。
-- 单文件组件统一使用 `<script setup lang="ts">`。
-- Element Plus 负责表单、表格、对话框等交互组件。
-- Tailwind 用于布局类（`flex`、`gap`、`bg-*` 等）；组件私有样式写在 `<style scoped lang="scss">` 中，可用 `@apply` 复用 Tailwind 工具类。
-- 全局样式入口：`src/styles/index.scss`，在 `main.ts` 中引入。
 
-### 路径别名
+### 后端规范
 
-- `@` 映射到 `src/`，示例：`import { useXxxStore } from '@/stores/xxx'`。
+  #### 1. 目录结构与职责绑定 (Directory Discipline)
 
-### 后端架构约定
+  严格遵循以下结构，AI 在创建新功能时必须按此映射：
 
-.......待补充
+  - `src/common/`: **全局共享资源** (非业务代码)
+  - `dto/`: 全局通用 DTO (如 `response.dto.ts`, `pagination.dto.ts`)。
+  - `exceptions/`: 自定义业务异常基类 (如 `business.exception.ts`)。
+  - `filters/`: 全局异常过滤器 (如 `http-exception.filter.ts`)。
+  - `interceptors/`: 全局拦截器 (如日志、响应包装)。
+  - `middleware/`: 全局中间件。
+  - `logger/`: 日志模块封装。
+  - `utils/`: 纯工具函数，无依赖注入。
 
-## 功能模块
+  - `src/config/`: 配置文件 (如 `configuration.ts`)。
+  - `src/database/`: 数据库连接、TypeORM 配置封装。
+  - `src/modules/`: **业务功能域** (Feature Modules)
+  - 每个子文件夹（如 `auth`）是一个独立的功能模块。
+  - **禁止**在 `modules` 下创建 `controllers`, `services` 这种按技术分层的文件夹，必须按业务聚合。
 
-.......待补充
 
-## 开发规范详细说明（面向 Agent）
+  #### 2. 命名规范 (Naming Conventions)
 
-### 前端开发规范详细说明
+  - **文件夹**: 小写蛇形命名 (snake_case) 或 短横线命名 (kebab-case) -> `user-profiles`。
+  - **文件**: PascalCase (大驼峰) -> `UserProfile.controller.ts`。
+  - **类名**: 与文件名一致，后缀明确 -> `UserProfileController`。
 
-1. **保持技术栈一致**：不引入未经讨论的新框架；新依赖优先选与 Vue 3 生态兼容的库。
-2. **最小改动原则**：只修改与任务相关的文件，不顺带重构无关代码。
-3. **类型先行**：新增业务实体先在 `src/types/` 定义接口，再在 Store 和视图中使用。
-4. **模块内聚**：新功能按 `types` → `stores` → `views` → `router` → `layout 菜单` 顺序扩展。
-5. **中文界面**：用户可见文案使用简体中文；Element Plus 已配置 `zh-cn` locale。
-6. **PC 优先**：布局默认适配桌面端宽度，侧边栏 + 主内容区结构。
-7. **构建须通过**：提交前确保 `pnpm build` 无 TypeScript 与构建错误。
-
-### 后端开发规范详细说明
-
-.......待补充
+  #### 3. 业务模块内部规范 (Naming Conventions)
+  **⚠️ 禁令 (Caveats):**
+  - **禁止**在 `modules/*` 下再创建名为 `common` 的文件夹来存放该模块的私有 DTO 或常量。私有的东西直接放在该模块根目录下，或者使用 `index.ts` 导出。
+  - **禁止** Controller 中出现 SQL 查询语句或复杂的业务逻辑判断，必须委派给 Service。
+  - **禁止** Service 中出现 `res.status(200).json(...)` 这种 HTTP 响应逻辑。
