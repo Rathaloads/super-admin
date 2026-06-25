@@ -1,7 +1,7 @@
 -- SuperAdmin 初始化脚本：创建数据库与用户表示例数据
 CREATE DATABASE IF NOT EXISTS super_admin DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE super_admin;
+USE super-admin;
 
 CREATE TABLE IF NOT EXISTS sys_user (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',

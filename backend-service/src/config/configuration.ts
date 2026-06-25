@@ -16,4 +16,9 @@ export default () => ({
     password: process.env.REDIS_PASSWORD || undefined,
     db: parseInt(process.env.REDIS_DB ?? '0', 10),
   },
+  jwt: {
+    secret: process.env.JWT_SECRET ?? 'super-admin-dev-secret',
+    /** 过期时间（秒），默认 7 天 */
+    expiresIn: parseInt(process.env.JWT_EXPIRES_IN ?? '604800', 10),
+  },
 });
