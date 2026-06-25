@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import { ElMessage } from 'element-plus'
-</script>
-
 <template>
   <div class="home-view">
     <el-card shadow="never">
@@ -17,6 +13,18 @@ import { ElMessage } from 'element-plus'
     </el-card>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ElMessage } from 'element-plus'
+import { request } from '@/network/request'
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  request.get('/api/test').then(res => {
+    console.log(res.data)
+  })
+})
+</script>
 
 <style scoped lang="scss">
 .home-view {

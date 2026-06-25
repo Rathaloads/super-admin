@@ -1,11 +1,19 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('@/views/LoginView.vue'),
+      meta: { title: '登录', public: true },
+    },
+    {
       path: '/',
       component: () => import('@/layouts/MainLayout.vue'),
+      meta: { requiresAuth: true },
       children: [
         {
           path: '',
@@ -15,11 +23,44 @@ const router = createRouter({
           path: 'home',
           name: 'home',
           component: () => import('@/views/home/HomeView.vue'),
-          meta: { title: '首页' },
+          meta: { title: '首页', requiresAuth: true },
         },
+        {
+          path: 'financial',
+          name: 'financial',
+          component: () => import('@/views/financial/index.vue'),
+          meta: { title: '财务管理', requiresAuth: true },
+          redirect: '/financial/found',
+          children: [
+            {
+              path: 'found',
+              name: 'found',
+              component: () => import('@/views/financial/FoundView.vue'),
+              meta: { title: '流水管理', requiresAuth: true },
+            },
+            {
+              path: 'liabilities',
+              name: 'liabilities',
+              component: () => import('@/views/financial/LiabilitiesView.vue'),
+              meta: { title: '负债管理', requiresAuth: true },
+            }
+          ]
+        }
       ],
     },
   ],
+})
+
+router.beforeEach((to) => {
+  const authStore = useAuthStore()
+
+  if (to.meta.public && authStore.isLoggedIn) {
+    return { path: '/home' }
+  }
+
+  if (to.meta.requiresAuth && !authStore.isLoggedIn) {
+    return { path: '/login', query: { redirect: to.fullPath } }
+  }
 })
 
 export default router

@@ -1,46 +1,35 @@
-<script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { HomeFilled } from '@element-plus/icons-vue'
-
-const route = useRoute()
-const router = useRouter()
-
-/** 当前页面标题，来自路由 meta */
-const pageTitle = computed(() => (route.meta.title as string) ?? 'SuperAdmin')
-
-/** 侧边栏菜单项 */
-const menuItems = [
-  { index: '/home', title: '首页', icon: HomeFilled },
-]
-
-/** 当前激活菜单 */
-const activeMenu = computed(() => route.path)
-
-/** 菜单点击跳转 */
-function handleMenuSelect(index: string) {
-  router.push(index)
-}
-</script>
-
 <template>
   <el-container class="layout-container">
     <!-- 侧边栏 -->
     <el-aside width="220px" class="layout-aside">
       <div class="layout-logo">SuperAdmin</div>
-      <el-menu
-        :default-active="activeMenu"
-        class="layout-menu"
-        @select="handleMenuSelect"
-      >
-        <el-menu-item
-          v-for="item in menuItems"
-          :key="item.index"
-          :index="item.index"
-        >
-          <el-icon><component :is="item.icon" /></el-icon>
-          <span>{{ item.title }}</span>
-        </el-menu-item>
+      <el-menu :default-active="activeMenu" class="layout-menu" @select="handleMenuSelect">
+        <template v-for="(item, idx) in menuItems" :key="idx">
+          <template v-if="item.childrens && item.childrens.length > 0">
+            <el-sub-menu :index="item.index">
+              <template #title>
+                <el-icon v-if="item.icon">
+                  <component :is="item.icon" />
+                </el-icon>
+                <span>{{ item.title }}</span>
+              </template>
+              <el-menu-item v-for="child in item.childrens" :key="child.key" :index="child.index">
+                <el-icon v-if="child.icon">
+                  <component :is="child.icon" />
+                </el-icon>
+                <span>{{ child.title }}</span>
+              </el-menu-item>
+            </el-sub-menu>
+          </template>
+          <template v-else>
+            <el-menu-item :index="item.index">
+              <el-icon v-if="item.icon">
+                <component :is="item.icon" />
+              </el-icon>
+              <span>{{ item.title }}</span>
+            </el-menu-item>
+          </template>
+        </template>
       </el-menu>
     </el-aside>
 
@@ -57,6 +46,41 @@ function handleMenuSelect(index: string) {
     </el-container>
   </el-container>
 </template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { HomeFilled } from '@element-plus/icons-vue'
+
+const route = useRoute()
+const router = useRouter()
+
+/** 当前页面标题，来自路由 meta */
+const pageTitle = computed(() => (route.meta.title as string) ?? 'SuperAdmin')
+
+/** 侧边栏菜单项 */
+const menuItems = [
+  { index: '/home', title: '首页', key: 'home', icon: HomeFilled },
+  {
+    index: '/financial', 
+    title: '财务管理',
+    key: 'financial',
+    icon: null, 
+    childrens: [
+      { index: '/financial/found', title: '流水管理', key: 'found', icon: null },
+      { index: '/financial/liabilities', title: '负债管理', key: 'liabilities', icon: null },
+    ]
+  },
+]
+
+/** 当前激活菜单 */
+const activeMenu = computed(() => route.path)
+
+/** 菜单点击跳转 */
+function handleMenuSelect(index: string) {
+  router.push(index)
+}
+</script>
 
 <style scoped lang="scss">
 .layout-container {
@@ -84,6 +108,6 @@ function handleMenuSelect(index: string) {
 }
 
 .layout-main {
-  @apply p-6;
+  @apply p-3;
 }
 </style>

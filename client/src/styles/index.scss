@@ -12,3 +12,21 @@ body,
 body {
   @apply bg-gray-50 text-gray-900;
 }
+
+.list-view {
+  @apply w-full h-full overflow-hidden relative flex flex-col p-[8px];
+
+  .list-view-header {
+    @apply w-full p-[4px];
+  }
+
+  .list-view-content {
+    @apply w-full flex-1 overflow-hidden relative;
+  }
+  .list-view-footer {
+    width: 100%;
+    height: 46px;
+    display: flex;
+    align-items: center;
+  }
+}
