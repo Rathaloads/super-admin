@@ -1,15 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
-enum eFundType {
-  INCOME = 1, // 收入
-  EXPENSE = 2, // 支出
-}
-
-enum eRepaymentStatus {
-  PENDING = 0, // 待还款
-  REPAID = 1, // 已还款
-  OVERDUE = 2, // 逾期
-}
+import { eFundType, eRepaymentStatus } from '../types';
 
 // 流水分类
 @Entity('fund_category')
@@ -17,7 +7,7 @@ export class FundCategoryEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'number', default:0, comment: '父级ID' })
+  @Column({ type: 'int', default:0, comment: '父级ID' })
   parentId: number;
 
   @Column({ type: 'enum', enum: eFundType, comment: '流水类型' })
@@ -29,7 +19,7 @@ export class FundCategoryEntity {
   @Column({ type: 'varchar', nullable: true, length: 64, comment: '图标' })
   icon?: string;
 
-  @Column({ type: 'number', default:0, comment: '是否删除'})
+  @Column({ type: 'int', default:0, comment: '是否删除'})
   isDeleted: number;
 }
 
@@ -54,10 +44,10 @@ export class FundEntity {
   @Column({ type: 'varchar', nullable: true, length: 64, comment: '备注' })
   remark?: string;
 
-  @Column({ type: 'datetime', comment: '创建时间' })
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', comment: '创建时间' })
   createdAt: Date;
 
-  @Column({ type: 'varchar', nullable: true, length: 64, comment: '拓展字段' })
+  @Column({ type: 'varchar', nullable: true, length: 1024, comment: '拓展字段' })
   extend?: string;
 }
 
@@ -86,7 +76,7 @@ export class FundLiabilitiesEntity {
   @Column({ type: 'datetime', comment: '结束时间' })
   endTime: Date;
 
-  @Column({ type: 'number', comment: '分期数' })
+  @Column({ type: 'int', comment: '分期数' })
   installments: number;
 
   @Column({ type: 'decimal', comment: '每期还款金额' })
@@ -111,7 +101,7 @@ export class FundLiabilitiesInstallmentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'number', comment: '关联负债ID' })
+  @Column({ type: 'int', comment: '关联负债ID' })
   liabilitiesId: number;
 
   @Column({ type: 'datetime', comment: '还款时间' })

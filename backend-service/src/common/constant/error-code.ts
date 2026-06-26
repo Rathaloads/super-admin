@@ -4,4 +4,6 @@ export const ERROR_CODE = {
     PASSWORD_INCORRECT: { code: 10002, message: 'Password incorrect' },
     EMAIL_ALREADY_EXISTS: { code: 10003, message: 'Email already exists' },
     AUTH_FAILED: { code: 10004, message: 'Authentication failed' },
+    DATA_NOT_FOUND: { code: 10005, message: 'Data not found' },
+    CATEGORY_HAS_SUB_CATEGORY: { code: 10006, message: 'Category has sub category' },
 }
