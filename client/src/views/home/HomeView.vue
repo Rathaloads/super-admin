@@ -4,34 +4,30 @@
       <template #header>
         <span>欢迎使用 SuperAdmin</span>
       </template>
-      <p class="home-desc">
-        基于 Vue 3 + Element Plus 的后台管理系统，可在此添加你的管理工具与功能模块。
-      </p>
-      <el-button type="primary" @click="ElMessage.success('前端项目已初始化完成')">
-        测试消息
-      </el-button>
+      <p class="home-desc">基于 Vue 3 + Element Plus 的后台管理系统，可在此添加你的管理工具与功能模块。</p>
+      <el-button type="primary" @click="ElMessage.success('前端项目已初始化完成')"> 测试消息 </el-button>
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from 'element-plus'
-import { request } from '@/network/request'
-import { onMounted } from 'vue'
+  import { ElMessage } from 'element-plus';
+  import { request } from '@/network/request';
+  import { onMounted } from 'vue';
 
-onMounted(() => {
-  request.get('/api/test').then(res => {
-    console.log(res.data)
-  })
-})
+  onMounted(() => {
+    request.get('/api/test').then((res) => {
+      console.log(res.data);
+    });
+  });
 </script>
 
 <style scoped lang="scss">
-.home-view {
-  @apply max-w-3xl;
-}
+  .home-view {
+    @apply max-w-3xl;
+  }
 
-.home-desc {
-  @apply mb-4 text-gray-600 leading-relaxed;
-}
+  .home-desc {
+    @apply mb-4 text-gray-600 leading-relaxed;
+  }
 </style>

@@ -1,9 +1,9 @@
 // eslint.config.mjs
-import { defineConfig } from 'eslint/config'
-import eslintJs from '@eslint/js'
-import tseslint from 'typescript-eslint'
-import pluginVue from 'eslint-plugin-vue'
-import prettier from 'eslint-config-prettier'
+import { defineConfig } from 'eslint/config';
+import eslintJs from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import pluginVue from 'eslint-plugin-vue';
+import prettier from 'eslint-config-prettier';
 
 export default defineConfig([
   // 1. JS 基础
@@ -36,9 +36,10 @@ export default defineConfig([
       '@typescript-eslint/no-explicit-any': ['warn', { ignoreRestArgs: true }],
       // 单单词组件名：看你们习惯 off / warn
       'vue/multi-word-component-names': 'off',
+      'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
   },
 
   // 6. 最后：关掉 ESLint 自己的格式规则，交给 Prettier
   prettier,
-])
+]);

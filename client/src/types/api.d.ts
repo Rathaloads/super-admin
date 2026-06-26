@@ -1,6 +1,6 @@
 /** 后端统一响应结构 */
 export interface ApiResponse<T = unknown> {
-  Code: number
-  Message: string
-  Data: T
+  Code: number;
+  Message: string;
+  Data: T;
 }

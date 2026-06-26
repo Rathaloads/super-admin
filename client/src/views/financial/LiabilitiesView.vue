@@ -26,8 +26,7 @@
           <el-table-column type="index" width="50" label="#" />
           <el-table-column prop="type" label="类型">
             <template #default="scope">
-              <el-tag :type="scope.row.type === 1 ? 'success' : 'danger'">{{ scope.row.type === 1 ? '收入' : '支出'
-                }}</el-tag>
+              <el-tag :type="scope.row.type === 1 ? 'success' : 'danger'">{{ scope.row.type === 1 ? '收入' : '支出' }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column prop="amount" label="金额" />
@@ -46,50 +45,53 @@
         </el-table>
       </div>
       <div class="list-view-footer">
-        <el-pagination v-model:current-page="pagination.currentPage" v-model:page-size="pagination.pageSize"
-          :total="pagination.total" layout="prev, pager, next" @current-change="handleCurrentChange"
-          @size-change="handleSizeChange" />
+        <el-pagination
+          v-model:current-page="pagination.currentPage"
+          v-model:page-size="pagination.pageSize"
+          :total="pagination.total"
+          layout="prev, pager, next"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import { type FormInstance } from 'element-plus'
+  import { ref, reactive } from 'vue';
+  import { type FormInstance } from 'element-plus';
 
-interface iFilterForm {
-  type: number,
-  dateRange: Array<string>
-}
+  interface iFilterForm {
+    type: number;
+    dateRange: Array<string>;
+  }
 
-interface iTableData {
-  id: number,
-	platform: string,
-	
-}
+  interface iTableData {
+    id: number;
+    platform: string;
+  }
 
-const filterFormRef = ref<FormInstance>();
-const filterForm = reactive<iFilterForm>({
-  type: 0,
-  dateRange: [],
-});
-const pagination = reactive({
-  currentPage: 1,
-  pageSize: 15,
-  total: 0,
-});
+  const filterFormRef = ref<FormInstance>();
+  const filterForm = reactive<iFilterForm>({
+    type: 0,
+    dateRange: [],
+  });
+  const pagination = reactive({
+    currentPage: 1,
+    pageSize: 15,
+    total: 0,
+  });
 
-const tableData = ref<Array<iTableData>>([]);
+  const tableData = ref<Array<iTableData>>([]);
 
-const handleFilter = () => { }
+  const handleFilter = () => {};
 
-const handleCurrentChange = (page: number) => {
-  pagination.currentPage = page;
-}
+  const handleCurrentChange = (page: number) => {
+    pagination.currentPage = page;
+  };
 
-const handleSizeChange = (size: number) => {
-  pagination.pageSize = size;
-}
-
+  const handleSizeChange = (size: number) => {
+    pagination.pageSize = size;
+  };
 </script>

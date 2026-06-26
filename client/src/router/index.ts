@@ -1,5 +1,5 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { createRouter, createWebHashHistory } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -43,24 +43,24 @@ const router = createRouter({
               name: 'liabilities',
               component: () => import('@/views/financial/LiabilitiesView.vue'),
               meta: { title: '负债管理', requiresAuth: true },
-            }
-          ]
-        }
+            },
+          ],
+        },
       ],
     },
   ],
-})
+});
 
 router.beforeEach((to) => {
-  const authStore = useAuthStore()
+  const authStore = useAuthStore();
 
   if (to.meta.public && authStore.isLoggedIn) {
-    return { path: '/home' }
+    return { path: '/home' };
   }
 
   if (to.meta.requiresAuth && !authStore.isLoggedIn) {
-    return { path: '/login', query: { redirect: to.fullPath } }
+    return { path: '/login', query: { redirect: to.fullPath } };
   }
-})
+});
 
-export default router
+export default router;
