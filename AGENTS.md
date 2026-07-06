@@ -78,7 +78,11 @@ pnpm build     # 生产构建
   | `api/` | 按模块拆分接口：`api/user.ts` / `api/order.ts`，统一走封装好的 request |
   | `types/` | 共享 TS 类型 |
   | `router/` | 路由定义 |
-  | `styles/` | 全局 tokens、variables、reset（谨慎扩张） |
+  | `styles/` | 全局 tokens、variables、reset（谨慎扩张）；**玻璃风格见 `glass.scss`** |
+
+  #### UI 设计风格（Acrylic Fluent）
+
+  所有新页面必须遵循 **亚克力玻璃 + Fluent 轻动效** 风格，详见 `client/AGENTS.md` 与 `.cursor/rules/frontend-ui-design.mdc`，参考实现 `client/src/views/home/HomeView.vue`。
 
 
 ### 后端规范

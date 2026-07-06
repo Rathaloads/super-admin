@@ -1,0 +1,407 @@
+// Acrylic Fluent 设计系统 — 共享 Token、Mixin 与全局 Class
+// 参考实现：src/views/home/HomeView.vue
+
+// ── 动效 ──
+$fluent-ease: cubic-bezier(0.33, 0, 0.67, 1);
+$duration-fast: 150ms;
+$duration-normal: 220ms;
+$duration-slow: 280ms;
+
+// ── 圆角 ──
+$radius-card: 16px;
+$radius-control: 10px;
+
+// ── 色彩 ──
+$color-text-primary: #1e293b;
+$color-text-secondary: #64748b;
+$color-text-muted: #94a3b8;
+$color-accent: #6366f1;
+$color-success: #10b981;
+$color-warning: #f59e0b;
+$color-danger: #ef4444;
+
+// ── 页面渐变背景 ──
+@mixin page-gradient-bg {
+  background: linear-gradient(145deg, #f8fafc 0%, #eef2ff 40%, #f0f9ff 70%, #faf5ff 100%);
+}
+
+// ── 亚克力玻璃卡片（可交互，hover 上浮） ──
+@mixin glass-card {
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: $radius-card;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 16px rgba(15, 23, 42, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition:
+    transform $duration-normal $fluent-ease,
+    box-shadow $duration-normal $fluent-ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 2px 4px rgba(15, 23, 42, 0.05),
+      0 12px 28px rgba(15, 23, 42, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  }
+}
+
+// ── 亚克力面板（列表容器，无 hover 位移） ──
+@mixin glass-panel {
+  @include glass-card;
+
+  &:hover {
+    transform: none;
+    box-shadow:
+      0 1px 2px rgba(15, 23, 42, 0.04),
+      0 4px 16px rgba(15, 23, 42, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+}
+
+// ── 主按钮 ──
+@mixin glass-primary-btn {
+  height: 38px;
+  padding: 0 18px;
+  border: none;
+  border-radius: $radius-control;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+  transition:
+    background $duration-fast $fluent-ease,
+    box-shadow $duration-fast $fluent-ease,
+    opacity $duration-fast $fluent-ease;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+// ── 次按钮 ──
+@mixin glass-ghost-btn {
+  height: 34px;
+  padding: 0 16px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: $radius-control;
+  background: rgba(255, 255, 255, 0.6);
+  color: $color-text-secondary;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background $duration-fast $fluent-ease,
+    border-color $duration-fast $fluent-ease,
+    box-shadow $duration-fast $fluent-ease,
+    color $duration-fast $fluent-ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(99, 102, 241, 0.25);
+    color: $color-accent;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+  }
+}
+
+// ── 进度条 ──
+@mixin progress-track {
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+@mixin progress-bar($color: $color-accent) {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, $color, color-mix(in srgb, $color 70%, white));
+  transition: width $duration-slow $fluent-ease;
+}
+
+// ══════════════════════════════════════
+// 全局可复用 Class
+// ══════════════════════════════════════
+
+.glass-card {
+  @include glass-card;
+}
+
+// ── 页面外壳 ──
+.page-shell {
+  position: relative;
+  height: 100%;
+  min-height: 0;
+  border-radius: $radius-card;
+  overflow: hidden;
+}
+
+.page-bg {
+  position: absolute;
+  inset: 0;
+  @include page-gradient-bg;
+  pointer-events: none;
+}
+
+.page-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+
+  &--blue {
+    width: 260px;
+    height: 260px;
+    top: -60px;
+    right: 8%;
+    background: rgba(99, 102, 241, 0.22);
+  }
+
+  &--violet {
+    width: 240px;
+    height: 240px;
+    bottom: 8%;
+    left: 4%;
+    background: rgba(167, 139, 250, 0.2);
+  }
+
+  &--mint {
+    width: 200px;
+    height: 200px;
+    bottom: 10%;
+    left: 5%;
+    background: rgba(52, 211, 153, 0.16);
+  }
+}
+
+.page-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding: 20px;
+  gap: 16px;
+}
+
+.page-header {
+  flex-shrink: 0;
+}
+
+.page-title {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 600;
+  color: $color-text-primary;
+  letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: $color-text-muted;
+}
+
+// ── 列表面板 ──
+.glass-panel {
+  @include glass-panel;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.glass-panel__toolbar {
+  flex-shrink: 0;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.glass-panel__body {
+  flex: 1;
+  min-height: 0;
+  padding: 0 12px;
+  overflow: hidden;
+}
+
+.glass-panel__footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  height: 52px;
+  padding: 0 20px;
+  border-top: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+// ── 表单控件 ──
+.glass-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+
+  .el-form-item {
+    margin-bottom: 0;
+    margin-right: 16px;
+  }
+
+  .el-form-item__label {
+    font-size: 13px;
+    color: $color-text-secondary;
+  }
+
+  .el-input__wrapper,
+  .el-select__wrapper {
+    border-radius: $radius-control;
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow: none;
+    transition: box-shadow $duration-fast $fluent-ease;
+
+    &:hover,
+    &.is-focus {
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+  }
+}
+
+.glass-btn {
+  &--primary {
+    @include glass-primary-btn;
+    height: 34px;
+  }
+
+  &--ghost {
+    @include glass-ghost-btn;
+  }
+}
+
+// ── 表格 ──
+.glass-table {
+  width: 100%;
+  background: transparent !important;
+
+  .el-table__inner-wrapper::before {
+    display: none;
+  }
+
+  .el-table__header-wrapper th.el-table__cell {
+    background: rgba(255, 255, 255, 0.4);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+    font-size: 12px;
+    font-weight: 600;
+    color: $color-text-secondary;
+    padding: 10px 0;
+  }
+
+  .el-table__body-wrapper .el-table__row {
+    background: transparent;
+    transition: background $duration-fast $fluent-ease;
+  }
+
+  .el-table__body-wrapper .el-table__row:hover > td.el-table__cell {
+    background: rgba(255, 255, 255, 0.55) !important;
+  }
+
+  td.el-table__cell {
+    border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+    padding: 12px 0;
+    font-size: 13px;
+    color: $color-text-primary;
+  }
+}
+
+// ── 徽章与操作按钮 ──
+.type-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &--income {
+    color: #059669;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+  }
+
+  &--expense {
+    color: #dc2626;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.12);
+  }
+}
+
+.glass-action-btn {
+  height: 28px;
+  padding: 0 10px;
+  margin-right: 6px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    background $duration-fast $fluent-ease,
+    color $duration-fast $fluent-ease;
+
+  &--edit {
+    background: rgba(99, 102, 241, 0.08);
+    color: $color-accent;
+
+    &:hover {
+      background: rgba(99, 102, 241, 0.15);
+    }
+  }
+
+  &--delete {
+    background: rgba(239, 68, 68, 0.06);
+    color: $color-danger;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.12);
+    }
+  }
+}
+
+.amount-text {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+
+  &--income {
+    color: #059669;
+  }
+
+  &--expense {
+    color: #dc2626;
+  }
+}
+
+.remark-text {
+  color: $color-text-secondary;
+}
+
+// ── 分页 ──
+.glass-pagination {
+  .el-pager li {
+    border-radius: 8px;
+    transition: background $duration-fast $fluent-ease;
+  }
+
+  .btn-prev,
+  .btn-next {
+    border-radius: 8px;
+  }
+}

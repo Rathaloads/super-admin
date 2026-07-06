@@ -1,3 +1,5 @@
+@use './glass.scss' as *;
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,27 +8,27 @@
 html,
 body,
 #app {
-  @apply h-full m-0;
+  height: 100%;
+  margin: 0;
 }
 
 body {
-  @apply bg-gray-50 text-gray-900;
+  @include page-gradient-bg;
+  color: $color-text-primary;
+  font-family:
+    'Segoe UI',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-.list-view {
-  @apply w-full h-full overflow-hidden relative flex flex-col p-[8px];
+/* Element Plus 全局微调，与 Acrylic Fluent 对齐 */
+.el-message {
+  border-radius: $radius-control !important;
+  backdrop-filter: blur(12px);
+}
 
-  .list-view-header {
-    @apply w-full p-[4px];
-  }
-
-  .list-view-content {
-    @apply w-full flex-1 overflow-hidden relative;
-  }
-  .list-view-footer {
-    width: 100%;
-    height: 46px;
-    display: flex;
-    align-items: center;
-  }
+.el-pagination.is-background .el-pager li.is-active {
+  background-color: $color-accent !important;
 }
