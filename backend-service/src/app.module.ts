@@ -7,6 +7,7 @@ import { WinstonLoggerModule } from './common/logger/winston-logger.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { RedisModule } from './redis/redis.module';
 import { FundModule } from './modules/fund/fund.module';
+import { ApplicationModule } from './modules/application/application.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { FundModule } from './modules/fund/fund.module';
     AuthModule,
     WinstonLoggerModule,
     FundModule,
+    ApplicationModule,
   ],
   controllers: [],
   providers: [LoggerMiddleware],

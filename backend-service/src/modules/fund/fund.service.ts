@@ -2,12 +2,13 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FundCategoryEntity, FundEntity, FundLiabilitiesEntity, FundLiabilitiesInstallmentEntity } from './entities/fund.entity';
-import { CreateAndUpdateFundCategoryDto, CreateFundDto } from './dto/fund.dto';
+import { CreateAndUpdateFundCategoryDto, CreateFundDto, CreateFundLiabilitiesDto } from './dto/fund.dto';
 import { BusinessException } from 'src/common/exceptions/business.exception';
 import { ERROR_CODE } from 'src/common/constant/error-code';
 import { REDIS_CLIENT } from 'src/redis/redis.module';
 import Redis from 'ioredis';
 import { PaginationDto } from 'src/common/dto/pagnation.dto';
+import { eRepaymentStatus } from './types';
 
 
 @Injectable()
@@ -103,4 +104,12 @@ export class FundService {
     await this.fundRepository.delete(id);
     this.logger.log(`删除流水: ${id}`);
   }
+
+
+  async createFundLiabilities(dto: CreateFundLiabilitiesDto) {
+    const data = this.fundLiabilitiesRepository.create(dto);
+    const saved = await this.fundLiabilitiesRepository.save(data);
+    return saved;
+  }
+
 }
