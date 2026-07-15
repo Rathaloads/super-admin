@@ -1,9 +1,16 @@
-import { IsNumber } from "class-validator";
+import { Type } from "class-transformer";
+import { IsIn, IsInt, IsNumber, Min } from "class-validator";
 
 export class PaginationDto {
+    @Type(() => Number)
     @IsNumber()
-    Page: number;
+    @IsInt()
+    @Min(1)
+    page: number;
 
+    @Type(() => Number)
     @IsNumber()
-    PageSize: number;
+    @IsInt()
+    @Min(1)
+    pageSize: number;
 }

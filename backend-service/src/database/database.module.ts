@@ -17,6 +17,7 @@ import configuration from '../config/configuration';
         database: config.get<string>('database.database'),
         autoLoadEntities: true,
         synchronize: config.get<boolean>('database.synchronize'),
+        logging: config.get<boolean>('database.logger'),
       }),
     }),
   ],

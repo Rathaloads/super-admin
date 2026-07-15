@@ -9,6 +9,7 @@ export default () => ({
     password: process.env.DB_PASSWORD ?? '',
     database: process.env.DB_DATABASE ?? 'super_admin',
     synchronize: process.env.DB_SYNC === 'true',
+    logger: process.env.DB_LOGGER === 'false',
   },
   redis: {
     host: process.env.REDIS_HOST ?? '127.0.0.1',

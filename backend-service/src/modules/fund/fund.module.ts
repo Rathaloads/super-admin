@@ -1,14 +1,17 @@
 import { Module } from '@nestjs/common';
-import { FundService } from './fund.service';
-import { FundController } from './fund.controller';
+import { FundService } from './service/fund.service';
+import { FundController } from './controller/fund.controller';
+import { LiabilitiesController } from './controller/liabilities.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FundCategoryEntity, FundEntity, FundLiabilitiesEntity, FundLiabilitiesInstallmentEntity } from './entities/fund.entity';
+import { FundEntity } from './entities/fund.entity';
+import { LiabilitiesService } from './service/liabilities.service';
+import { LiabilitiesEntity, LiabilitiesPlantEntity } from './entities/liabilities.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([FundCategoryEntity, FundEntity, FundLiabilitiesEntity, FundLiabilitiesInstallmentEntity]),
+    TypeOrmModule.forFeature([FundEntity, LiabilitiesEntity, LiabilitiesPlantEntity]),
   ],
-  controllers: [FundController],
-  providers: [FundService],
+  controllers: [FundController, LiabilitiesController],
+  providers: [FundService, LiabilitiesService],
 })
 export class FundModule {}
