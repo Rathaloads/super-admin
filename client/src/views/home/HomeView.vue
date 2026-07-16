@@ -16,7 +16,7 @@
       </header>
 
       <!-- 统计卡片 -->
-      <section class="stats-grid">
+      <section v-if="true" class="stats-grid">
         <article
           v-for="stat in stats"
           :key="stat.key"
@@ -49,7 +49,7 @@
       </section>
 
       <!-- 下方面板 -->
-      <section class="panels-grid">
+      <section v-if="true" class="panels-grid">
         <!-- TODO 面板 -->
         <article class="glass-card todo-panel">
           <div class="panel-header">

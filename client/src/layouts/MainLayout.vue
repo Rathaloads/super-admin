@@ -84,14 +84,23 @@ const userLabel = computed(() => authStore.user?.nickname || authStore.user?.mai
 
 const menuItems: MenuItem[] = [
   { index: '/home', title: '首页', key: 'home', icon: HomeFilled },
+  // {
+  //   index: '/financial',
+  //   title: '财务管理',
+  //   key: 'financial',
+  //   icon: Wallet,
+  //   childrens: [
+  //     { index: '/financial/found', title: '流水管理', key: 'found', icon: List },
+  //     { index: '/financial/liabilities', title: '负债管理', key: 'liabilities', icon: CreditCard },
+  //   ],
+  // },
   {
-    index: '/financial',
-    title: '财务管理',
-    key: 'financial',
+    index: '/bookkeeping',
+    title: 'Bookkeeping',
+    key: 'bookkeeping',
     icon: Wallet,
     childrens: [
-      { index: '/financial/found', title: '流水管理', key: 'found', icon: List },
-      { index: '/financial/liabilities', title: '负债管理', key: 'liabilities', icon: CreditCard },
+      { index: '/bookkeeping/book', title: '账本', key: 'book', icon: List },
     ],
   },
 ];

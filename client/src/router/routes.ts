@@ -43,6 +43,22 @@ export const routes: RouteRecordRaw[] = [
           },
         ],
       },
+
+      {
+        path: 'bookkeeping',
+        name: 'bookkeeping',
+        component: () => import('@/views/bookkeeping/index.vue'),
+        meta: { title: 'Bookkeeping', requiresAuth: true },
+        redirect: '/bookkeeping/book',
+        children: [
+          {
+            path: 'book',
+            name: 'book',
+            component: () => import('@/views/bookkeeping/book/index.vue'),
+            meta: { title: 'Bookkeeping Book', requiresAuth: true },
+          },
+        ],
+      }
     ],
   },
 ]

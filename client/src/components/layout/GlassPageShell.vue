@@ -6,10 +6,12 @@
     </div>
 
     <div class="page-content">
-      <header v-if="title" class="page-header">
-        <h2 class="page-title">{{ title }}</h2>
-        <p v-if="subtitle" class="page-subtitle">{{ subtitle }}</p>
-      </header>
+      <slot name="header">
+        <header v-if="title" class="page-header">
+          <h2 class="page-title">{{ title }}</h2>
+          <p v-if="subtitle" class="page-subtitle">{{ subtitle }}</p>
+        </header>
+      </slot>
       <slot />
     </div>
   </div>
