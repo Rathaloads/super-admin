@@ -8,6 +8,8 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { RedisModule } from './redis/redis.module';
 import { FundModule } from './modules/fund/fund.module';
 import { ApplicationModule } from './modules/application/application.module';
+import { BookkeepingModule } from './modules/bookkeeping/bookkeeping.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { ApplicationModule } from './modules/application/application.module';
     WinstonLoggerModule,
     FundModule,
     ApplicationModule,
+    BookkeepingModule,
+    UserModule,
   ],
   controllers: [],
   providers: [LoggerMiddleware],
