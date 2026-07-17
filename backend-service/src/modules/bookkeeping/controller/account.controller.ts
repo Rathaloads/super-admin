@@ -21,7 +21,7 @@ export class AccountController {
     }
 
     @Get()
-    public async getAccountList(@Query() bookId: number) {
+    public async getAccountList(@Query('bookId') bookId: number) {
         const data = await this.bookkeepingService.QueryAccount(bookId);
         return data
     }

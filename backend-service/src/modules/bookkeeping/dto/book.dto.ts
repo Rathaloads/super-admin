@@ -1,6 +1,7 @@
 import { IsArray, IsDateString, IsEnum, IsNotEmpty, IsNumber, IsOptional, isString, IsString, Length } from "class-validator";
 import { eBookRecordType, eBookType } from "../constant/types";
 import { PaginationDto } from "@/common/dto/pagnation.dto";
+import { Type } from "class-transformer";
 
 export class CreateBookDto {
     @IsEnum(eBookType, { message: "类型错误" })
@@ -81,9 +82,6 @@ export class CreateBookRecordDto {
     @IsNumber()
     amount: number;
 
-    @IsEnum(eBookRecordType)
-    recordType: eBookRecordType;
-
     @IsArray()
     @IsOptional()
     @IsString({ each: true })
@@ -99,17 +97,17 @@ export class CreateBookRecordDto {
 }
 
 export class UpdateBookRecordDto {
-    @IsNumber()
+    @Type(() => Number)
     @IsOptional()
     categoryId?: number;
 
-    @IsNumber()
+    @Type(() => Number)
+    @IsOptional()
+    accountId?: number;
+
+    @Type(() => Number)
     @IsOptional()
     amount?: number = 0;
-
-    @IsEnum(eBookRecordType)
-    @IsOptional()
-    recordType?: eBookRecordType;
 
     @IsArray()
     @IsOptional()
@@ -126,16 +124,16 @@ export class UpdateBookRecordDto {
 }
 
 export class QueryBookRecordDto extends PaginationDto {
-    @IsNumber()
+    @Type(() => Number)
     bookId: number;
 
-    @IsNumber()
+    @Type(() => Number)
     @IsOptional()
     categoryId?: number;
 
-    @IsEnum(eBookRecordType)
+    @Type(() => Number)
     @IsOptional()
-    recordType?: eBookRecordType;
+    accountId?: number;
 
     @IsArray()
     @IsOptional()

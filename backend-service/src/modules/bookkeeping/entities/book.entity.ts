@@ -24,7 +24,6 @@ export class AccountEntity {
     id: number;
 
     @ManyToOne(() => BookEntity, (book) => book.id)
-    @JoinColumn({ name: "book_id" })
     book: BookEntity;
 
     @Column({ type: "varchar", length: 255, comment: "账户名称" })
@@ -66,21 +65,15 @@ export class BookRecordEntity {
     id: number;
 
     @ManyToOne(() => BookEntity, (book) => book.id)
-    @JoinColumn({ name: "book_id" })
     book: BookEntity;
 
     @ManyToOne(() => AccountEntity, (account) => account.id)
-    @JoinColumn({ name: "account_id" })
     account: AccountEntity;
 
     @Column({ type: "decimal", precision: 10, scale: 2, comment: "金额" })
     amount: number;
 
-    @Column({ type: "enum", enum: eBookRecordType, comment: "账单类型" })
-    recordType: eBookRecordType;
-
     @ManyToOne(() => BookRecordCategoryEntity, (category) => category.id)
-    @JoinColumn({ name: "category_id" })
     category: BookRecordCategoryEntity;
 
     @Column({ type: "simple-array", comment: "标签" })

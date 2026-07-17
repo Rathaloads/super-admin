@@ -10,16 +10,16 @@ export class LoggerMiddleware implements NestMiddleware {
   ) {}
 
   use(req: Request, res: Response, next: NextFunction) {
-    const { method, originalUrl, ip } = req;
-    res.on('finish', () => {
-      this.logger.info('HTTP 请求', {
-        context: 'HTTP',
-        method,
-        url: originalUrl,
-        status: res.statusCode,
-        ip,
-      });
-    });
+    // const { method, originalUrl, ip } = req;
+    // res.on('finish', () => {
+    //   this.logger.info('HTTP 请求', {
+    //     context: 'HTTP',
+    //     method,
+    //     url: originalUrl,
+    //     status: res.statusCode,
+    //     ip,
+    //   });
+    // });
     next();
   }
 }

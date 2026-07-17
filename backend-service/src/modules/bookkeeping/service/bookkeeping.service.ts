@@ -174,7 +174,16 @@ export class BookkeepingService {
     }
 
     public async QueryAccount(bookId: number) {
-        const list = await this.accountRepository.find({where: { book: { id: bookId } } })
+        const list = await this.accountRepository.find({
+            relations: {
+                book: true,
+            },
+            where: {
+                book: {
+                    id: bookId,
+                }
+            }
+        })
         return list;
     }
 
@@ -188,16 +197,20 @@ export class BookkeepingService {
     }
 
     public async RemoveAccount(id: number) {
-        const recordResult = await this.bookRecordRepository.findAndCount({where: { account: { id: id } } })
-        if (recordResult[1] > 0) {
-            throw new BusinessException(400,"Account has records");
-        }
         await this.accountRepository.delete(id);
     }
 
     // 创建账单
     public async CreateBookRecord(dto: CreateBookRecordDto) {
-        const data = await this.bookRecordRepository.save(dto);
+        const data = await this.bookRecordRepository.save({
+            book: { id: dto.bookId },
+            account: { id: dto.accountId },
+            category: { id: dto.categoryId},
+            tags: dto.tags,
+            amount: dto.amount,
+            remark: dto.remark,
+            extend: dto.extend,
+        });
         return data
     }
 
@@ -221,8 +234,8 @@ export class BookkeepingService {
         if (dto.categoryId) {
             qb.andWhere("record.categoryId = :categoryId", { categoryId: dto.categoryId });
         }
-        if (dto.recordType) {
-            qb.andWhere("record.recordType = :recordType", { recordType: dto.recordType });
+        if (dto.accountId) {
+            qb.andWhere("record.recordType = :recordType", { accountId: dto.accountId });
         }
         if (dto.tags) {
             qb.andWhere("record.tags @> :tags", { tags: dto.tags });

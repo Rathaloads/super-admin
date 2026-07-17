@@ -25,14 +25,17 @@ const consoleFormat = winston.format.combine(
 export const WinstonLoggerModule = WinstonModule.forRoot({
   level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
   transports: [
-    new winston.transports.Console({ format: consoleFormat }),
+    new winston.transports.Console({ 
+      format: consoleFormat,
+      level: 'debug',
+    }),
     new winston.transports.File({
       filename: join(logsDir, 'error.log'),
       level: 'error',
       format: fileFormat,
     }),
     new winston.transports.File({
-      filename: join(logsDir, 'combined.log'),
+      filename: join(logsDir, 'info.log'),
       format: fileFormat,
       level: 'info',
     }),
